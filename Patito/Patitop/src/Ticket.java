@@ -1,37 +1,27 @@
-package Patito.Patitop;
+import java.time.LocalDateTime;
 
-import java.util.Date;
-import java.util.Scanner;
-
-public class Ticket{ 
+public class Ticket { 
+    private static int contadorTickets = 1; 
     private int ticket;
-    private Date fechaYHora_emision;
+    private LocalDateTime fechaYHora_emision;  
     private int ID_Asiento;
-    private int ID_pasajero;
+    private Pasajeros pasajero; 
 
-    public Ticket(int ticket, Date fechaYHora_emision, int ID_Asiento, int ID_pasajero) {
-        this.ticket = ticket;
-        this.fechaYHora_emision = fechaYHora_emision;
+    public Ticket(int ID_Asiento, Pasajeros pasajero) {
+        this.ticket = contadorTickets++; 
+        this.fechaYHora_emision = LocalDateTime.now(); 
         this.ID_Asiento = ID_Asiento;
-        this.ID_pasajero = ID_pasajero;
+        this.pasajero = pasajero;
     }
 
     public int getTicket() {
         return ticket;
     }
 
-    public void setTicket(int ticket) {
-        this.ticket = ticket;
-    }
-
-    public Date getFechaYHora_emision() {
+    public LocalDateTime getFechaYHora_emision() {
         return fechaYHora_emision;
     }
-
-    public void setFechaYHora_emision(Date fechaYHora_emision) {
-        this.fechaYHora_emision = fechaYHora_emision;
-    }
-
+    
     public int getID_Asiento() {
         return ID_Asiento;
     }
@@ -40,11 +30,11 @@ public class Ticket{
         this.ID_Asiento = ID_Asiento;
     }
 
-    public int getID_pasajero() {
-        return ID_pasajero;
+    public Pasajeros getPasajero() {
+        return pasajero;
     }
 
-    public void setID_pasajero(int ID_pasajero) {
-        this.ID_pasajero = ID_pasajero;
+    public void setPasajero(Pasajeros pasajero) {
+        this.pasajero = pasajero;
     }
 }
