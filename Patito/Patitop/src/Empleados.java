@@ -36,10 +36,15 @@ public class Empleados {
     public void setRol(boolean rol) {this.rol = rol;}
 
     public Vuelos darDeAltaVuelo(int asientosDisponibles, int idEmpleado, String origen, 
-    String destino, Date horaDespegue, Date horaArrivo, Date fechaVuelo) {
-        Vuelos nuevoVuelo = new Vuelos(asientosDisponibles, idEmpleado, origen, destino, horaDespegue, horaArrivo, fechaVuelo, true);
+                                 String destino, Date horaDespegue, Date horaArrivo, Date fechaVuelo) {
+        int idVuelo = generarIDVuelo(); // Generar un ID único para el vuelo
+        Vuelos nuevoVuelo = new Vuelos(idVuelo, asientosDisponibles, idEmpleado, origen, destino, horaDespegue, horaArrivo, fechaVuelo, true);
         System.out.println("Vuelo creado exitosamente con ID: " + nuevoVuelo.getID_Vuelo());
         return nuevoVuelo;
+    }
+
+    private static int generarIDVuelo() {
+        return (int) (Math.random() * 10000); // Genera un ID aleatorio entre 0 y 9999
     }
 
     public boolean darDeBajaVuelo(int idVuelo, Vuelos vueloADarBaja) {
