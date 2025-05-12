@@ -59,7 +59,7 @@ public class Empleados {
         // Crea los asientos para el nuevo vuelo
         for (int i = 1; i <= asientosDisponibles; i++) {
             int idAsiento = generarIDAsiento(); // Genera un ID unico para el asiento
-            String numAsiento = "A" + i; // Puedes personalizar la numeración como desees
+            String numAsiento = "A" + i;
             Asientos nuevoAsiento = new Asientos(idAsiento, numAsiento, true, idVuelo);
             listaAsientos.add(nuevoAsiento);
         }
@@ -77,7 +77,7 @@ public class Empleados {
         return (int) (Math.random() * 100000); // Genera un ID aleatorio entre 0 y 99999
     }
 
-    public boolean darDeBajaVuelo(int idVuelo, Vuelos vueloADarBaja) {
+    public boolean darDeBajaVuelo(int idVuelo, Vuelos vueloADarBaja, ArrayList<Pasajeros> listaPasajeros) {
         if (vueloADarBaja == null) {
             System.out.println("Error: El vuelo no existe.");
             return false;
@@ -86,11 +86,31 @@ public class Empleados {
             System.out.println("Error: El ID del vuelo no coincide.");
             return false;
         }
+        ///////////////////////////////////////////////////////////////////////////
+        // Eliminar tickets de pasajeros que tienen este vuelo
+        int pasajerosAfectados = 0;
+        for (Pasajeros pasajero : listaPasajeros) {
+            if (pasajero.getTicketVuelo() != null &&
+                    pasajero.getTicketVuelo().getID_Vuelo() == idVuelo) {
+                // Eliminar el ticket del pasajero
+                pasajero.setTicketVuelo(null);
+                pasajero.setAsientoReservado(null);
+                pasajerosAfectados++;
+            }
+        }
+
+        // Marcar el vuelo como inactivo
         vueloADarBaja.setEstado(false);
+
         System.out.println("Vuelo con ID " + idVuelo + " dado de baja exitosamente.");
+        if (pasajerosAfectados > 0) {
+            System.out.println("Se eliminaron los tickets de " + pasajerosAfectados + " pasajero(s).");
+        }
+
         return true;
     }
 
+    /////////////////////////////////////////////////////
     public Pasajeros buscarPasajero(ArrayList<Pasajeros> listaPasajeros, String criterio, String valor) {
         if (listaPasajeros == null || listaPasajeros.isEmpty()) {
             System.out.println("No hay pasajeros registrados en el sistema.");
@@ -209,26 +229,54 @@ public class Empleados {
         }
 
         System.out.println("\n=== ASIENTOS DISPONIBLES ===");
-        for (int i = 0; i < asientosDisponibles.size(); i++) {
-            System.out.println((i + 1) + ". " + asientosDisponibles.get(i).getNum_asiento());
+        // Muestra los asientos como grid
+        int columnas = 5;
+        System.out.println("\nSeleccione un asiento:");
+
+        System.out.print("    ");
+        for (int i = 0; i < columnas; i++) {
+            System.out.printf("%-6s", (i + 1));
+        }
+        System.out.println("\n    " + "-".repeat(columnas * 6));
+
+        for (int i = 0; i < asientosDisponibles.size(); i += columnas) {
+            System.out.printf("%2d | ", (i / columnas + 1));
+            for (int j = 0; j < columnas && (i + j) < asientosDisponibles.size(); j++) {
+                System.out.printf("%-6s", asientosDisponibles.get(i + j).getNum_asiento());
+            }
+            System.out.println();
         }
 
-        System.out.print("\nSeleccione un numero de asiento: ");
+        System.out.println("\nIngrese fila y columna (ejemplo: 2,3):");
         Scanner scanner = new Scanner(System.in);
-        int seleccion;
+        String seleccionInput = scanner.nextLine();
+        int seleccion = 0;
 
         try {
-            seleccion = Integer.parseInt(scanner.nextLine());
-            if (seleccion < 1 || seleccion > asientosDisponibles.size()) {
-                System.out.println("Seleccion invalida.");
-                return false;
+            String[] partes = seleccionInput.split(",");
+            if (partes.length == 2) {
+                int fila = Integer.parseInt(partes[0].trim());
+                int columna = Integer.parseInt(partes[1].trim());
+                seleccion = (fila - 1) * columnas + columna;
+
+                if (seleccion < 1 || seleccion > asientosDisponibles.size()) {
+                    System.out.println("Selección inválida.");
+                    return false;
+                }
+            } else {
+                seleccion = Integer.parseInt(seleccionInput);
+                if (seleccion < 1 || seleccion > asientosDisponibles.size()) {
+                    System.out.println("Seleccion invalida.");
+                    return false;
+                }
             }
         } catch (NumberFormatException e) {
-            System.out.println("Error: Debe ingresar un numero.");
+            System.out.println("Error: Debe ingresar numeros válidos.");
             return false;
         }
 
         Asientos asientoSeleccionado = asientosDisponibles.get(seleccion - 1);
+
         asientoSeleccionado.setEstado(false);
 
         vuelo.setAsientos_disponibles(vuelo.getAsientos_disponibles() - 1);
@@ -246,8 +294,7 @@ public class Empleados {
         return true;
     }
 
-    public boolean darDeBajaUsuarioDeVuelo(Pasajeros pasajero, Vuelos vuelo, ArrayList<Asientos> listaAsientos,
-            String numAsiento) {
+    public boolean darDeBajaUsuarioDeVuelo(Pasajeros pasajero, Vuelos vuelo, ArrayList<Asientos> listaAsientos) {
         if (pasajero == null) {
             System.out.println("Error: El pasajero no existe.");
             return false;
@@ -259,27 +306,41 @@ public class Empleados {
         }
 
         if (!vuelo.isEstado()) {
-            System.out.println("Error: El vuelo no esta activo.");
+            System.out.println("Error: El vuelo no está activo.");
+            return false;
+        }
+
+        if (pasajero.getTicketVuelo() == null || pasajero.getTicketVuelo().getID_Vuelo() != vuelo.getID_Vuelo()) {
+            System.out.println("Error: El pasajero no tiene un boleto para este vuelo.");
+            return false;
+        }
+
+        String numAsiento = pasajero.getAsientoReservado();
+        if (numAsiento == null) {
+            System.out.println("Error: El pasajero no tiene un asiento asignado en este vuelo.");
             return false;
         }
 
         Asientos asientoOcupado = null;
         for (Asientos asiento : listaAsientos) {
             if (asiento.getID_Vuelo() == vuelo.getID_Vuelo() &&
-                    asiento.getNum_asiento().equals(numAsiento) &&
-                    !asiento.isEstado()) {
+                    asiento.getNum_asiento().equals(numAsiento)) {
                 asientoOcupado = asiento;
                 break;
             }
         }
 
         if (asientoOcupado == null) {
-            System.out.println("Error: No se encontro el asiento " + numAsiento + " ocupado en este vuelo.");
+            System.out.println("Error: No se encontró el asiento " + numAsiento + " en este vuelo.");
             return false;
         }
 
         asientoOcupado.setEstado(true);
+
         vuelo.setAsientos_disponibles(vuelo.getAsientos_disponibles() + 1);
+
+        pasajero.setTicketVuelo(null);
+        pasajero.setAsientoReservado(null);
 
         System.out.println("Pasajero " + pasajero.getNombre() + " con ID " +
                 pasajero.getID_pasajero() + " dado de baja exitosamente del vuelo " +

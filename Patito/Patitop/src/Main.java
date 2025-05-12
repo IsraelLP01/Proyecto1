@@ -161,8 +161,8 @@ public class Main {
                     int idVuelo = scanner.nextInt();
                     scanner.nextLine();
                     Vuelos vueloADarBaja = buscarVueloPorID(listaVuelos, idVuelo);
-                    if (vueloADarBaja != null) {
-                        empleado.darDeBajaVuelo(idVuelo, vueloADarBaja);
+                    if (vueloADarBaja != null) { // Da de baja el vuelo, por lo tanto el ticket
+                        empleado.darDeBajaVuelo(idVuelo, vueloADarBaja, listaPasajeros);
                     } else {
                         System.out.println("Vuelo no encontrado.");
                     }
@@ -198,13 +198,11 @@ public class Main {
                     System.out.print("Ingrese el ID del vuelo: ");
                     int idVueloBaja = scanner.nextInt();
                     scanner.nextLine();
-                    System.out.print("Ingrese el numero de asiento: ");
-                    String numAsiento = scanner.nextLine();
 
                     Pasajeros pasajeroBaja = buscarPasajeroPorID(listaPasajeros, idPasajeroBaja);
                     Vuelos vueloBaja = buscarVueloPorID(listaVuelos, idVueloBaja);
 
-                    if (empleado.darDeBajaUsuarioDeVuelo(pasajeroBaja, vueloBaja, listaAsientos, numAsiento)) {
+                    if (empleado.darDeBajaUsuarioDeVuelo(pasajeroBaja, vueloBaja, listaAsientos)) {
                         System.out.println("Pasajero dado de baja del vuelo exitosamente.");
                     }
                     break;
@@ -224,7 +222,6 @@ public class Main {
         } while (opcion != 7);
     }
 
-    // Método para listar todos los pasajeros
     private static void listarTodosPasajeros(ArrayList<Pasajeros> listaPasajeros) {
         if (listaPasajeros.isEmpty()) {
             System.out.println("No hay pasajeros registrados en el sistema.");
@@ -250,7 +247,8 @@ public class Main {
             System.out.println("1. Buscar vuelos");
             System.out.println("2. Reservar vuelo");
             System.out.println("3. Ver ticket reservado");
-            System.out.println("4. Salir");
+            System.out.println("4. Cancelar reserva");
+            System.out.println("5. Salir");
             System.out.print("Seleccione una opcion: ");
             opcion = scanner.nextInt();
             scanner.nextLine();
@@ -269,13 +267,17 @@ public class Main {
                     break;
 
                 case 4:
+                    pasajero.cancelarReserva(listaAsientos);
+                    break;
+
+                case 5:
                     System.out.println("Saliendo del menu pasajero...");
                     break;
 
                 default:
                     System.out.println("Opcion no valida. Intente de nuevo.");
             }
-        } while (opcion != 4);
+        } while (opcion != 5);
     }
 
     private static Empleados buscarEmpleadoPorCredenciales(ArrayList<Empleados> listaEmpleados, String correo,

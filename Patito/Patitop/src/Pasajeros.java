@@ -76,18 +76,30 @@ public class Pasajeros {
     }
 
     public void buscarVuelo(ArrayList<Vuelos> vuelos) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Ingrese el origen del vuelo:");
-        String origen = scanner.nextLine();
-        System.out.println("Ingrese el destino del vuelo:");
-        String destino = scanner.nextLine();
+        System.out.println("\n=== VUELOS DISPONIBLES ===");
+        System.out.println("ID\tOrigen\tDestino\tFecha\tAsientos disponibles");
+        System.out.println("----------------------------------------------");
 
-        System.out.println("Vuelos disponibles:");
+        boolean hayVuelosDisponibles = false;
+
+        // Lista todos los vuelos activos
         for (Vuelos vuelo : vuelos) {
-            if (vuelo.getOrigen().equalsIgnoreCase(origen) && vuelo.getDestino().equalsIgnoreCase(destino)
-                    && vuelo.isEstado()) {
-                vuelo.mostrarInformacion();
+            if (vuelo.isEstado()) {
+                SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+                String fechaStr = vuelo.getFecha_Vuelo() != null ? formatoFecha.format(vuelo.getFecha_Vuelo())
+                        : "No disponible";
+
+                System.out.println(vuelo.getID_Vuelo() + "\t" +
+                        vuelo.getOrigen() + "\t" +
+                        vuelo.getDestino() + "\t" +
+                        fechaStr + "\t" +
+                        vuelo.getAsientos_disponibles());
+                hayVuelosDisponibles = true;
             }
+        }
+
+        if (!hayVuelosDisponibles) {
+            System.out.println("No hay vuelos disponibles en este momento.");
         }
     }
 
@@ -182,27 +194,53 @@ public class Pasajeros {
         }
 
         System.out.println("\n=== ASIENTOS DISPONIBLES ===");
-        for (int i = 0; i < asientosDisponibles.size(); i++) {
-            System.out.println((i + 1) + ". " + asientosDisponibles.get(i).getNum_asiento());
+        // Muestra la lista de asientos como grid
+        int columnas = 5;
+        System.out.println("\nSeleccione un asiento:");
+
+        System.out.print("    ");
+        for (int i = 0; i < columnas; i++) {
+            System.out.printf("%-6s", (i + 1));
+        }
+        System.out.println("\n    " + "-".repeat(columnas * 6));
+
+        for (int i = 0; i < asientosDisponibles.size(); i += columnas) {
+            System.out.printf("%2d | ", (i / columnas + 1));
+            for (int j = 0; j < columnas && (i + j) < asientosDisponibles.size(); j++) {
+                System.out.printf("%-6s", asientosDisponibles.get(i + j).getNum_asiento());
+            }
+            System.out.println();
         }
 
-        // Seleccionar un asiento
-        System.out.print("\nSeleccione un numero de asiento: ");
-        int seleccion;
+        System.out.println("\nIngrese fila y columna (ejemplo: 2,3):");
+        String seleccionInput = scanner.nextLine();
+        int seleccion = 0;
 
         try {
-            seleccion = Integer.parseInt(scanner.nextLine());
-            if (seleccion < 1 || seleccion > asientosDisponibles.size()) {
-                System.out.println("Seleccion invalida.");
-                return false;
+            String[] partes = seleccionInput.split(",");
+            if (partes.length == 2) {
+                int fila = Integer.parseInt(partes[0].trim());
+                int columna = Integer.parseInt(partes[1].trim());
+                seleccion = (fila - 1) * columnas + columna;
+
+                if (seleccion < 1 || seleccion > asientosDisponibles.size()) {
+                    System.out.println("Selección inválida.");
+                    return false;
+                }
+            } else {
+                // Fallback to direct index selection
+                seleccion = Integer.parseInt(seleccionInput);
+                if (seleccion < 1 || seleccion > asientosDisponibles.size()) {
+                    System.out.println("Selección inválida.");
+                    return false;
+                }
             }
         } catch (NumberFormatException e) {
-            System.out.println("Error: Debe ingresar un numero.");
+            System.out.println("Error: Debe ingresar números válidos.");
             return false;
         }
 
         Asientos asientoSeleccionado = asientosDisponibles.get(seleccion - 1);
-        asientoSeleccionado.setEstado(false);
 
         vueloSeleccionado.setAsientos_disponibles(vueloSeleccionado.getAsientos_disponibles() - 1);
 
@@ -216,6 +254,46 @@ public class Pasajeros {
                 vueloSeleccionado.getOrigen() + " - " + vueloSeleccionado.getDestino() + ")");
         System.out.println("Fecha: " + vueloSeleccionado.getFecha_Vuelo());
         System.out.println("Asiento: " + asientoSeleccionado.getNum_asiento());
+
+        return true;
+    }
+
+    public boolean cancelarReserva(ArrayList<Asientos> listaAsientos) {
+        if (this.ticketVuelo == null) { // Revisa si el pasajero tiene un vuelo reservado
+            System.out.println("No tiene ningún vuelo reservado para cancelar.");
+            return false;
+        }
+
+        Asientos asientoOcupado = null;
+        for (Asientos asiento : listaAsientos) { // Revisa si el asiento reservado por el pasajero existe
+            if (asiento.getID_Vuelo() == this.ticketVuelo.getID_Vuelo() &&
+                    asiento.getNum_asiento().equals(this.asientoReservado)) {
+                asientoOcupado = asiento;
+                break;
+            }
+        }
+
+        if (asientoOcupado == null) {
+            System.out.println("Error: No se encontro el asiento " + this.asientoReservado);
+            return false;
+        }
+
+        asientoOcupado.setEstado(true); // Marca el asiento como disponible
+        this.ticketVuelo.setAsientos_disponibles(this.ticketVuelo.getAsientos_disponibles() + 1);
+
+        int idVuelo = this.ticketVuelo.getID_Vuelo();
+        String origen = this.ticketVuelo.getOrigen();
+        String destino = this.ticketVuelo.getDestino();
+        String asiento = this.asientoReservado;
+
+        // Limpia la informacion del ticket
+        this.ticketVuelo = null;
+        this.asientoReservado = null;
+
+        System.out.println("\n=== RESERVA CANCELADA ===");
+        System.out.println("Vuelo: " + idVuelo + " (" + origen + " - " + destino + ")");
+        System.out.println("Asiento liberado: " + asiento);
+        System.out.println("Su reserva ha sido cancelada exitosamente.");
 
         return true;
     }
