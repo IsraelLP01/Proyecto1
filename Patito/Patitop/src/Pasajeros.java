@@ -79,7 +79,8 @@ public class Pasajeros {
 
         System.out.println("Vuelos disponibles:");
         for (Vuelos vuelo : vuelos) {
-            if (vuelo.getOrigen().equalsIgnoreCase(origen) && vuelo.getDestino().equalsIgnoreCase(destino) && vuelo.isEstado()) {
+            if (vuelo.getOrigen().equalsIgnoreCase(origen) && vuelo.getDestino().equalsIgnoreCase(destino)
+                    && vuelo.isEstado()) {
                 vuelo.mostrarInformacion();
             }
         }
@@ -87,14 +88,14 @@ public class Pasajeros {
 
     public void verTicket() {
         if (this.ticketVuelo == null) {
-            System.out.println("No tiene ningún ticket reservado.");
+            System.out.println("No tiene ningun ticket reservado.");
             return;
         }
-        
+
         // Formatear fechas y horas correctamente
         SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm");
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
-        
+
         System.out.println("\n=== TICKET DE VUELO ===");
         System.out.println("Pasajero: " + this.getNombre());
         System.out.println("ID Vuelo: " + this.ticketVuelo.getID_Vuelo());
@@ -109,43 +110,43 @@ public class Pasajeros {
 
     public boolean reservarVuelo(ArrayList<Vuelos> listaVuelos, ArrayList<Asientos> listaAsientos) {
         Scanner scanner = new Scanner(System.in);
-        
+
         // Mostrar vuelos disponibles
         ArrayList<Vuelos> vuelosActivos = new ArrayList<>();
         System.out.println("\n=== VUELOS DISPONIBLES ===");
-        
+
         for (Vuelos vuelo : listaVuelos) {
             if (vuelo.isEstado() && vuelo.getAsientos_disponibles() > 0) {
                 vuelosActivos.add(vuelo);
             }
         }
-        
+
         if (vuelosActivos.isEmpty()) {
             System.out.println("No hay vuelos disponibles en este momento.");
             return false;
         }
-        
+
         System.out.println("ID\tOrigen\tDestino\tFecha\tAsientos disponibles");
         System.out.println("----------------------------------------------");
-        
+
         for (Vuelos vuelo : vuelosActivos) {
-            System.out.println(vuelo.getID_Vuelo() + "\t" + 
-                              vuelo.getOrigen() + "\t" + 
-                              vuelo.getDestino() + "\t" + 
-                              vuelo.getFecha_Vuelo() + "\t" + 
-                              vuelo.getAsientos_disponibles());
+            System.out.println(vuelo.getID_Vuelo() + "\t" +
+                    vuelo.getOrigen() + "\t" +
+                    vuelo.getDestino() + "\t" +
+                    vuelo.getFecha_Vuelo() + "\t" +
+                    vuelo.getAsientos_disponibles());
         }
-        
+
         // Seleccionar un vuelo
         System.out.print("\nIngrese el ID del vuelo que desea reservar: ");
         int idVueloSeleccionado;
         try {
             idVueloSeleccionado = Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {
-            System.out.println("Error: Debe ingresar un número válido.");
+            System.out.println("Error: Debe ingresar un numero valido.");
             return false;
         }
-        
+
         // Buscar el vuelo seleccionado
         Vuelos vueloSeleccionado = null;
         for (Vuelos vuelo : vuelosActivos) {
@@ -154,12 +155,12 @@ public class Pasajeros {
                 break;
             }
         }
-        
+
         if (vueloSeleccionado == null) {
-            System.out.println("Error: El vuelo seleccionado no existe o no está disponible.");
+            System.out.println("Error: El vuelo seleccionado no existe o no esta disponible.");
             return false;
         }
-        
+
         // Mostrar asientos disponibles
         ArrayList<Asientos> asientosDisponibles = new ArrayList<>();
         for (Asientos asiento : listaAsientos) {
@@ -167,48 +168,48 @@ public class Pasajeros {
                 asientosDisponibles.add(asiento);
             }
         }
-        
+
         if (asientosDisponibles.isEmpty()) {
             System.out.println("Error: No hay asientos disponibles en este vuelo.");
             return false;
         }
-        
+
         System.out.println("\n=== ASIENTOS DISPONIBLES ===");
         for (int i = 0; i < asientosDisponibles.size(); i++) {
-            System.out.println((i+1) + ". " + asientosDisponibles.get(i).getNum_asiento());
+            System.out.println((i + 1) + ". " + asientosDisponibles.get(i).getNum_asiento());
         }
-        
+
         // Seleccionar un asiento
-        System.out.print("\nSeleccione un número de asiento: ");
+        System.out.print("\nSeleccione un numero de asiento: ");
         int seleccion;
-        
+
         try {
             seleccion = Integer.parseInt(scanner.nextLine());
             if (seleccion < 1 || seleccion > asientosDisponibles.size()) {
-                System.out.println("Selección inválida.");
+                System.out.println("Seleccion invalida.");
                 return false;
             }
         } catch (NumberFormatException e) {
-            System.out.println("Error: Debe ingresar un número.");
+            System.out.println("Error: Debe ingresar un numero.");
             return false;
         }
-        
-        Asientos asientoSeleccionado = asientosDisponibles.get(seleccion-1);
+
+        Asientos asientoSeleccionado = asientosDisponibles.get(seleccion - 1);
         asientoSeleccionado.setEstado(false);
-        
+
         vueloSeleccionado.setAsientos_disponibles(vueloSeleccionado.getAsientos_disponibles() - 1);
-        
-        // Guardar la información del ticket
+
+        // Guarda la información del ticket
         this.ticketVuelo = vueloSeleccionado;
         this.asientoReservado = asientoSeleccionado.getNum_asiento();
-        
+
         System.out.println("\n=== RESERVA CONFIRMADA ===");
         System.out.println("Pasajero: " + this.getNombre());
-        System.out.println("Vuelo: " + vueloSeleccionado.getID_Vuelo() + " (" + 
-                           vueloSeleccionado.getOrigen() + " - " + vueloSeleccionado.getDestino() + ")");
+        System.out.println("Vuelo: " + vueloSeleccionado.getID_Vuelo() + " (" +
+                vueloSeleccionado.getOrigen() + " - " + vueloSeleccionado.getDestino() + ")");
         System.out.println("Fecha: " + vueloSeleccionado.getFecha_Vuelo());
         System.out.println("Asiento: " + asientoSeleccionado.getNum_asiento());
-        
+
         return true;
     }
 }

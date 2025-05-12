@@ -45,7 +45,7 @@ public class Asientos {
     }
 
     public String toString() {
-        return "Asiento [ID=" + ID_Asiento + ", número=" + num_asiento +
-                ", disponible=" + Estado + ", vuelo=" + ID_Vuelo + "]";
+        return "Asiento [ID:" + ID_Asiento + ", numero:" + num_asiento +
+                ", disponible:" + Estado + ", vuelo:" + ID_Vuelo + "]";
     }
 }
