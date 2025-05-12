@@ -36,15 +36,30 @@ public class Empleados {
     public void setRol(boolean rol) {this.rol = rol;}
 
     public Vuelos darDeAltaVuelo(int asientosDisponibles, int idEmpleado, String origen, 
-                                 String destino, Date horaDespegue, Date horaArrivo, Date fechaVuelo) {
+                                 String destino, Date horaDespegue, Date horaArrivo, Date fechaVuelo,
+                                 ArrayList<Asientos> listaAsientos) {
         int idVuelo = generarIDVuelo(); // Generar un ID único para el vuelo
         Vuelos nuevoVuelo = new Vuelos(idVuelo, asientosDisponibles, idEmpleado, origen, destino, horaDespegue, horaArrivo, fechaVuelo, true);
+        
+        // Crear los asientos para el nuevo vuelo
+        for (int i = 1; i <= asientosDisponibles; i++) {
+            int idAsiento = generarIDAsiento(); // Generar ID único para el asiento
+            String numAsiento = "A" + i; // Puedes personalizar la numeración como desees
+            Asientos nuevoAsiento = new Asientos(idAsiento, numAsiento, true, idVuelo);
+            listaAsientos.add(nuevoAsiento);
+        }
+        
         System.out.println("Vuelo creado exitosamente con ID: " + nuevoVuelo.getID_Vuelo());
+        System.out.println("Se crearon " + asientosDisponibles + " asientos para este vuelo.");
         return nuevoVuelo;
     }
 
     private static int generarIDVuelo() {
         return (int) (Math.random() * 10000); // Genera un ID aleatorio entre 0 y 9999
+    }
+    
+    private static int generarIDAsiento() {
+        return (int) (Math.random() * 100000); // Genera un ID aleatorio entre 0 y 99999
     }
 
     public boolean darDeBajaVuelo(int idVuelo, Vuelos vueloADarBaja) {

@@ -78,7 +78,7 @@ public class Main {
                     String contraseñaPasajero = scanner.nextLine();
                     Pasajeros pasajero = buscarPasajeroPorCredenciales(listaPasajeros, correoPasajero, contraseñaPasajero);
                     if (pasajero != null) {
-                        menuPasajero(scanner, listaVuelos, pasajero);
+                        menuPasajero(scanner, listaVuelos, listaAsientos, pasajero);
                     } else {
                         System.out.println("Credenciales incorrectas.");
                     }
@@ -146,7 +146,7 @@ public class Main {
                         Date horaArrivo = new SimpleDateFormat("HH:mm").parse(horaArrivoStr);
                         Date fechaVuelo = new SimpleDateFormat("dd/MM/yyyy").parse(fechaVueloStr);
 
-                        Vuelos nuevoVuelo = empleado.darDeAltaVuelo(asientosDisponibles, empleado.getID_Empleado(), origen, destino, horaDespegue, horaArrivo, fechaVuelo);
+                        Vuelos nuevoVuelo = empleado.darDeAltaVuelo(asientosDisponibles, empleado.getID_Empleado(), origen, destino, horaDespegue, horaArrivo, fechaVuelo, listaAsientos);
                         listaVuelos.add(nuevoVuelo);
                         System.out.println("Vuelo registrado exitosamente.");
                     } catch (ParseException e) {
@@ -222,7 +222,7 @@ public class Main {
         } while (opcion != 6);
     }
 
-    private static void menuPasajero(Scanner scanner, ArrayList<Vuelos> listaVuelos, Pasajeros pasajero) {
+    private static void menuPasajero(Scanner scanner, ArrayList<Vuelos> listaVuelos, ArrayList<Asientos> listaAsientos, Pasajeros pasajero) {
         int opcion;
         do {
             System.out.println("\n=== MENÚ PASAJERO ===");
@@ -240,7 +240,7 @@ public class Main {
                     break;
 
                 case 2:
-                    pasajero.reservarVuelo(listaVuelos);
+                    pasajero.reservarVuelo(listaVuelos, listaAsientos);
                     break;
 
                 case 3:
@@ -293,3 +293,4 @@ public class Main {
         return null;
     }
 }
+
