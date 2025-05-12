@@ -123,7 +123,8 @@ public class Main {
             System.out.println("3. Buscar pasajero");
             System.out.println("4. Dar de alta un pasajero a un vuelo");
             System.out.println("5. Dar de baja un pasajero de un vuelo");
-            System.out.println("6. Salir");
+            System.out.println("6. Ver vuelos disponibles");
+            System.out.println("7. Salir");
             System.out.print("Seleccione una opcion: ");
             opcion = scanner.nextInt();
             scanner.nextLine();
@@ -139,23 +140,18 @@ public class Main {
                         System.out.print("Asientos disponibles: ");
                         int asientosDisponibles = scanner.nextInt();
                         scanner.nextLine();
-                        System.out.print("Hora de despegue (HH:mm): ");
-                        String horaDespegueStr = scanner.nextLine();
-                        System.out.print("Hora de llegada (HH:mm): ");
-                        String horaArrivoStr = scanner.nextLine();
                         System.out.print("Fecha del vuelo (dd/MM/yyyy): ");
                         String fechaVueloStr = scanner.nextLine();
 
-                        Date horaDespegue = new SimpleDateFormat("HH:mm").parse(horaDespegueStr);
-                        Date horaArrivo = new SimpleDateFormat("HH:mm").parse(horaArrivoStr);
                         Date fechaVuelo = new SimpleDateFormat("dd/MM/yyyy").parse(fechaVueloStr);
 
+                        // Usar null para los campos de hora
                         Vuelos nuevoVuelo = empleado.darDeAltaVuelo(asientosDisponibles, empleado.getID_Empleado(),
-                                origen, destino, horaDespegue, horaArrivo, fechaVuelo, listaAsientos);
+                                origen, destino, null, null, fechaVuelo, listaAsientos);
                         listaVuelos.add(nuevoVuelo);
                         System.out.println("Vuelo registrado exitosamente.");
                     } catch (ParseException e) {
-                        System.out.println("Error al ingresar las fechas u horas. Intente de nuevo.");
+                        System.out.println("Error al ingresar las fechas. Intente de nuevo.");
                     }
                     break;
 
@@ -218,13 +214,18 @@ public class Main {
                     break;
 
                 case 6:
+                    // Ver vuelos disponibles
+                    empleado.buscarVuelosActivos(listaVuelos);
+                    break;
+
+                case 7:
                     System.out.println("Saliendo del menu empleado...");
                     break;
 
                 default:
                     System.out.println("Opcion no valida. Intente de nuevo.");
             }
-        } while (opcion != 6);
+        } while (opcion != 7);
     }
 
     private static void menuPasajero(Scanner scanner, ArrayList<Vuelos> listaVuelos, ArrayList<Asientos> listaAsientos,

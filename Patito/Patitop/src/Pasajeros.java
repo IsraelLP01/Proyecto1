@@ -92,8 +92,7 @@ public class Pasajeros {
             return;
         }
 
-        // Formatear fechas y horas correctamente
-        SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm");
+        // Formatear solo la fecha, no intentar formatear las horas
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
 
         System.out.println("\n=== TICKET DE VUELO ===");
@@ -101,9 +100,13 @@ public class Pasajeros {
         System.out.println("ID Vuelo: " + this.ticketVuelo.getID_Vuelo());
         System.out.println("Origen: " + this.ticketVuelo.getOrigen());
         System.out.println("Destino: " + this.ticketVuelo.getDestino());
-        System.out.println("Fecha: " + formatoFecha.format(this.ticketVuelo.getFecha_Vuelo()));
-        System.out.println("Hora de despegue: " + formatoHora.format(this.ticketVuelo.getHora_Despegue()));
-        System.out.println("Hora de llegada: " + formatoHora.format(this.ticketVuelo.getHora_Arrivo()));
+
+        if (this.ticketVuelo.getFecha_Vuelo() != null) {
+            System.out.println("Fecha: " + formatoFecha.format(this.ticketVuelo.getFecha_Vuelo()));
+        } else {
+            System.out.println("Fecha: No disponible");
+        }
+
         System.out.println("Asiento: " + this.asientoReservado);
         System.out.println("=======================");
     }
@@ -199,7 +202,7 @@ public class Pasajeros {
 
         vueloSeleccionado.setAsientos_disponibles(vueloSeleccionado.getAsientos_disponibles() - 1);
 
-        // Guarda la información del ticket
+        // Guarda la informacion del ticket
         this.ticketVuelo = vueloSeleccionado;
         this.asientoReservado = asientoSeleccionado.getNum_asiento();
 
