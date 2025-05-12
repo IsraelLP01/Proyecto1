@@ -59,6 +59,22 @@ public class Pasajeros {
         this.rol = rol;
     }
 
+    public Vuelos getTicketVuelo() {
+        return ticketVuelo;
+    }
+
+    public void setTicketVuelo(Vuelos ticketVuelo) {
+        this.ticketVuelo = ticketVuelo;
+    }
+
+    public String getAsientoReservado() {
+        return asientoReservado;
+    }
+
+    public void setAsientoReservado(String asientoReservado) {
+        this.asientoReservado = asientoReservado;
+    }
+
     public void registrarse() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Ingrese su nombre:");
@@ -92,7 +108,6 @@ public class Pasajeros {
             return;
         }
 
-        // Formatear solo la fecha, no intentar formatear las horas
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
 
         System.out.println("\n=== TICKET DE VUELO ===");

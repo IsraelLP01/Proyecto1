@@ -244,6 +244,9 @@ public class Empleados {
 
         vuelo.setAsientos_disponibles(vuelo.getAsientos_disponibles() - 1);
 
+        pasajero.setTicketVuelo(vuelo);
+        pasajero.setAsientoReservado(asientoSeleccionado.getNum_asiento());
+
         System.out.println("Pasajero " + pasajero.getNombre() + " con ID " +
                 pasajero.getID_pasajero() + " registrado exitosamente en el vuelo " +
                 vuelo.getID_Vuelo() + " (" + vuelo.getOrigen() + " - " +

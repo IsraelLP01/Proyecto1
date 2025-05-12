@@ -120,7 +120,7 @@ public class Main {
             System.out.println("\n=== MENU EMPLEADO ===");
             System.out.println("1. Dar de alta un vuelo");
             System.out.println("2. Dar de baja un vuelo");
-            System.out.println("3. Buscar pasajero");
+            System.out.println("3. Listar todos los pasajeros");
             System.out.println("4. Dar de alta un pasajero a un vuelo");
             System.out.println("5. Dar de baja un pasajero de un vuelo");
             System.out.println("6. Ver vuelos disponibles");
@@ -169,12 +169,8 @@ public class Main {
                     break;
 
                 case 3:
-                    // Buscar pasajero
-                    System.out.print("Ingrese el criterio de búsqueda (id, nombre, correo): ");
-                    String criterio = scanner.nextLine();
-                    System.out.print("Ingrese el valor de búsqueda: ");
-                    String valor = scanner.nextLine();
-                    empleado.buscarPasajero(listaPasajeros, criterio, valor);
+                    // Listar todos los pasajeros
+                    listarTodosPasajeros(listaPasajeros);
                     break;
 
                 case 4:
@@ -226,6 +222,24 @@ public class Main {
                     System.out.println("Opcion no valida. Intente de nuevo.");
             }
         } while (opcion != 7);
+    }
+
+    // Método para listar todos los pasajeros
+    private static void listarTodosPasajeros(ArrayList<Pasajeros> listaPasajeros) {
+        if (listaPasajeros.isEmpty()) {
+            System.out.println("No hay pasajeros registrados en el sistema.");
+            return;
+        }
+
+        System.out.println("\n=== LISTA DE PASAJEROS ===");
+        System.out.println("ID\tNombre\t\tCorreo");
+        System.out.println("--------------------------------------------");
+
+        for (Pasajeros pasajero : listaPasajeros) {
+            System.out.println(pasajero.getID_pasajero() + "\t" +
+                    pasajero.getNombre() + "\t\t" +
+                    pasajero.getCorreo());
+        }
     }
 
     private static void menuPasajero(Scanner scanner, ArrayList<Vuelos> listaVuelos, ArrayList<Asientos> listaAsientos,
