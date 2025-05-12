@@ -7,16 +7,14 @@ public class Pasajeros {
     private String nombre;
     private String contraseña;
     private String correo;
-    private boolean rol; // true = admin, false = pasajero
     private Vuelos ticketVuelo; // Ticket reservado por el pasajero
     private String asientoReservado; // Asiento reservado por el pasajero
 
-    public Pasajeros(int ID_pasajero, String nombre, String contraseña, String correo, boolean rol) {
+    public Pasajeros(int ID_pasajero, String nombre, String contraseña, String correo) {
         this.ID_pasajero = ID_pasajero;
         this.nombre = nombre;
         this.contraseña = contraseña;
         this.correo = correo;
-        this.rol = rol;
     }
 
     public int getID_pasajero() {
@@ -51,14 +49,6 @@ public class Pasajeros {
         this.correo = correo;
     }
 
-    public boolean isRol() {
-        return rol;
-    }
-
-    public void setRol(boolean rol) {
-        this.rol = rol;
-    }
-
     public Vuelos getTicketVuelo() {
         return ticketVuelo;
     }
@@ -83,7 +73,6 @@ public class Pasajeros {
         this.contraseña = scanner.nextLine();
         System.out.println("Ingrese su correo:");
         this.correo = scanner.nextLine();
-        this.rol = false; // Por defecto, el rol es pasajero
     }
 
     public void buscarVuelo(ArrayList<Vuelos> vuelos) {

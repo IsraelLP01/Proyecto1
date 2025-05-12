@@ -7,21 +7,17 @@ public class Vuelos {
     private int ID_empleado;
     private String Origen;
     private String Destino;
-    private Date Hora_Despegue;
-    private Date Hora_Arrivo;
     private Date Fecha_Vuelo;
     private boolean Estado; // true = activo, false = inactivo
 
     // Constructor
     public Vuelos(int ID_Vuelo, int Asientos_disponibles, int ID_empleado, String Origen, String Destino,
-            Date Hora_Despegue, Date Hora_Arrivo, Date Fecha_Vuelo, boolean Estado) {
+            Date Fecha_Vuelo, boolean Estado) {
         this.ID_Vuelo = ID_Vuelo;
         this.Asientos_disponibles = Asientos_disponibles;
         this.ID_empleado = ID_empleado;
         this.Origen = Origen;
         this.Destino = Destino;
-        this.Hora_Despegue = Hora_Despegue;
-        this.Hora_Arrivo = Hora_Arrivo;
         this.Fecha_Vuelo = Fecha_Vuelo;
         this.Estado = Estado;
     }
@@ -67,22 +63,6 @@ public class Vuelos {
         this.Destino = Destino;
     }
 
-    public Date getHora_Despegue() {
-        return Hora_Despegue;
-    }
-
-    public void setHora_Despegue(Date Hora_Despegue) {
-        this.Hora_Despegue = Hora_Despegue;
-    }
-
-    public Date getHora_Arrivo() {
-        return Hora_Arrivo;
-    }
-
-    public void setHora_Arrivo(Date Hora_Arrivo) {
-        this.Hora_Arrivo = Hora_Arrivo;
-    }
-
     public Date getFecha_Vuelo() {
         return Fecha_Vuelo;
     }
@@ -98,8 +78,8 @@ public class Vuelos {
     public void setEstado(boolean Estado) {
         this.Estado = Estado;
     }
-    // Método para mostrar información del vuelo
 
+    // Método para mostrar información del vuelo
     public void mostrarInformacion() {
         System.out.println("ID Vuelo: " + ID_Vuelo);
         System.out.println("Asientos disponibles: " + Asientos_disponibles);
@@ -109,5 +89,4 @@ public class Vuelos {
         System.out.println("Fecha Vuelo: " + Fecha_Vuelo);
         System.out.println("Estado: " + (Estado ? "Activo" : "Inactivo"));
     }
-
 }

@@ -13,7 +13,7 @@ public class Main {
         ArrayList<Asientos> listaAsientos = new ArrayList<>();
 
         // Crear un administrador por defecto
-        Empleados admin = new Empleados(0, "Admin", "admin123", "admin@correo.com", true);
+        Empleados admin = new Empleados(0, "Admin", "admin123", "admin@correo.com");
         listaEmpleados.add(admin);
 
         int opcion;
@@ -67,7 +67,7 @@ public class Main {
 
                     // Crear un nuevo pasajero y agregarlo a la lista
                     Pasajeros nuevoPasajero = new Pasajeros(listaPasajeros.size() + 1, nombrePasajero,
-                            contraseñaPasajeroRegistro, correoPasajeroRegistro, false);
+                            contraseñaPasajeroRegistro, correoPasajeroRegistro);
                     listaPasajeros.add(nuevoPasajero);
                     System.out.println("Pasajero registrado exitosamente con ID: " + nuevoPasajero.getID_pasajero());
                     break;
@@ -108,7 +108,7 @@ public class Main {
         System.out.print("Ingrese la contraseña del nuevo empleado: ");
         String contraseña = scanner.nextLine();
 
-        Empleados nuevoEmpleado = new Empleados(listaEmpleados.size() + 1, nombre, contraseña, correo, true);
+        Empleados nuevoEmpleado = new Empleados(listaEmpleados.size() + 1, nombre, contraseña, correo);
         listaEmpleados.add(nuevoEmpleado);
         System.out.println("Empleado agregado exitosamente.");
     }
@@ -147,7 +147,7 @@ public class Main {
 
                         // Usar null para los campos de hora
                         Vuelos nuevoVuelo = empleado.darDeAltaVuelo(asientosDisponibles, empleado.getID_Empleado(),
-                                origen, destino, null, null, fechaVuelo, listaAsientos);
+                                origen, destino, fechaVuelo, listaAsientos);
                         listaVuelos.add(nuevoVuelo);
                         System.out.println("Vuelo registrado exitosamente.");
                     } catch (ParseException e) {

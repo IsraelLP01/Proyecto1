@@ -8,15 +8,13 @@ public class Empleados {
     private String nombre;
     private String contraseña;
     private String correo;
-    private boolean rol; // El empleado siempre será 1 en el boooleano, ya que es el rol de empleado.
 
     // Constructor
-    public Empleados(int ID_Empleado, String nombre, String contraseña, String correo, boolean rol) {
+    public Empleados(int ID_Empleado, String nombre, String contraseña, String correo) {
         this.ID_Empleado = ID_Empleado;
         this.nombre = nombre;
         this.contraseña = contraseña;
         this.correo = correo;
-        this.rol = rol;
     }
 
     // Getters y Setters
@@ -52,20 +50,11 @@ public class Empleados {
         this.correo = correo;
     }
 
-    public boolean isRol() {
-        return rol;
-    }
-
-    public void setRol(boolean rol) {
-        this.rol = rol;
-    }
-
     public Vuelos darDeAltaVuelo(int asientosDisponibles, int idEmpleado, String origen,
-            String destino, Date horaDespegue, Date horaArrivo, Date fechaVuelo,
-            ArrayList<Asientos> listaAsientos) {
+            String destino, Date fechaVuelo, ArrayList<Asientos> listaAsientos) {
         int idVuelo = generarIDVuelo(); // Genrera un ID unico para el vuelo
-        Vuelos nuevoVuelo = new Vuelos(idVuelo, asientosDisponibles, idEmpleado, origen, destino, horaDespegue,
-                horaArrivo, fechaVuelo, true);
+        Vuelos nuevoVuelo = new Vuelos(idVuelo, asientosDisponibles, idEmpleado, origen, destino,
+                fechaVuelo, true);
 
         // Crea los asientos para el nuevo vuelo
         for (int i = 1; i <= asientosDisponibles; i++) {
