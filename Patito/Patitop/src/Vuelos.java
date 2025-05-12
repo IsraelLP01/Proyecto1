@@ -1,5 +1,5 @@
-
 import java.util.Date;
+
 public class Vuelos {
     // Atributos
     private int ID_Vuelo;
@@ -25,33 +25,79 @@ public class Vuelos {
         this.Fecha_Vuelo = Fecha_Vuelo;
         this.Estado = Estado;
     }
+
     // Getters y Setters
-    public int getID_Vuelo() {return ID_Vuelo;}
-    public void setID_Vuelo(int ID_Vuelo) {this.ID_Vuelo = ID_Vuelo;}
+    public int getID_Vuelo() {
+        return ID_Vuelo;
+    }
 
-    public int getAsientos_disponibles() {return Asientos_disponibles;}
-    public void setAsientos_disponibles(int Asientos_disponibles) {this.Asientos_disponibles = Asientos_disponibles;}
+    public void setID_Vuelo(int ID_Vuelo) {
+        this.ID_Vuelo = ID_Vuelo;
+    }
 
-    public int getID_empleado() {return ID_empleado;}
-    public void setID_empleado(int ID_empleado) {this.ID_empleado = ID_empleado;}
+    public int getAsientos_disponibles() {
+        return Asientos_disponibles;
+    }
 
-    public String getOrigen() {return Origen;}
-    public void setOrigen(String Origen) {this.Origen = Origen;}
+    public void setAsientos_disponibles(int Asientos_disponibles) {
+        this.Asientos_disponibles = Asientos_disponibles;
+    }
 
-    public String getDestino() {return Destino;}
-    public void setDestino(String Destino) {this.Destino = Destino;}
+    public int getID_empleado() {
+        return ID_empleado;
+    }
 
-    public Date getHora_Despegue() {return Hora_Despegue;}
-    public void setHora_Despegue(Date Hora_Despegue) {this.Hora_Despegue = Hora_Despegue;}
+    public void setID_empleado(int ID_empleado) {
+        this.ID_empleado = ID_empleado;
+    }
 
-    public Date getHora_Arrivo() {return Hora_Arrivo;}
-    public void setHora_Arrivo(Date Hora_Arrivo) {this.Hora_Arrivo = Hora_Arrivo;}
+    public String getOrigen() {
+        return Origen;
+    }
 
-    public Date getFecha_Vuelo() {return Fecha_Vuelo;}
-    public void setFecha_Vuelo(Date Fecha_Vuelo) {this.Fecha_Vuelo = Fecha_Vuelo;}
+    public void setOrigen(String Origen) {
+        this.Origen = Origen;
+    }
 
-    public boolean isEstado() {return Estado;}
-    public void setEstado(boolean Estado) {this.Estado = Estado;}
+    public String getDestino() {
+        return Destino;
+    }
+
+    public void setDestino(String Destino) {
+        this.Destino = Destino;
+    }
+
+    public Date getHora_Despegue() {
+        return Hora_Despegue;
+    }
+
+    public void setHora_Despegue(Date Hora_Despegue) {
+        this.Hora_Despegue = Hora_Despegue;
+    }
+
+    public Date getHora_Arrivo() {
+        return Hora_Arrivo;
+    }
+
+    public void setHora_Arrivo(Date Hora_Arrivo) {
+        this.Hora_Arrivo = Hora_Arrivo;
+    }
+
+    public Date getFecha_Vuelo() {
+        return Fecha_Vuelo;
+    }
+
+    public void setFecha_Vuelo(Date Fecha_Vuelo) {
+        this.Fecha_Vuelo = Fecha_Vuelo;
+    }
+
+    public boolean isEstado() {
+        return Estado;
+    }
+
+    public void setEstado(boolean Estado) {
+        this.Estado = Estado;
+    }
     // Método para mostrar información del vuelo
 
     public void mostrarInformacion() {
@@ -60,8 +106,6 @@ public class Vuelos {
         System.out.println("ID Empleado: " + ID_empleado);
         System.out.println("Origen: " + Origen);
         System.out.println("Destino: " + Destino);
-        System.out.println("Hora Despegue: " + Hora_Despegue);
-        System.out.println("Hora Arrivo: " + Hora_Arrivo);
         System.out.println("Fecha Vuelo: " + Fecha_Vuelo);
         System.out.println("Estado: " + (Estado ? "Activo" : "Inactivo"));
     }

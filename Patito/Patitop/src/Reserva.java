@@ -50,10 +50,10 @@ public class Reserva {
 
     public String toString() {
         return "Reserva{" +
-                "ID_Reserva=" + ID_Reserva +
-                ", Fecha_Reserva=" + Fecha_Reserva +
-                ", ID_Pasajero=" + ID_Pasajero +
-                ", ID_Asiento=" + ID_Asiento +
+                "ID_Reserva:" + ID_Reserva +
+                ", Fecha_Reserva:" + Fecha_Reserva +
+                ", ID_Pasajero:" + ID_Pasajero +
+                ", ID_Asiento:" + ID_Asiento +
                 '}';
     }
 

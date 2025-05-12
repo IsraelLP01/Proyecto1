@@ -1,3 +1,5 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
@@ -16,19 +18,19 @@ public class Main {
 
         int opcion;
         do {
-            System.out.println("\n=== SISTEMA DE GESTIÓN DE VUELOS ===");
-            System.out.println("1. Iniciar sesión como administrador");
-            System.out.println("2. Iniciar sesión como empleado");
+            System.out.println("\n=== SISTEMA DE GESTION DE VUELOS ===");
+            System.out.println("1. Iniciar sesion como administrador");
+            System.out.println("2. Iniciar sesion como empleado");
             System.out.println("3. Registrarse como pasajero");
-            System.out.println("4. Iniciar sesión como pasajero");
+            System.out.println("4. Iniciar sesion como pasajero");
             System.out.println("5. Salir");
-            System.out.print("Seleccione una opción: ");
+            System.out.print("Seleccione una opcion: ");
             opcion = scanner.nextInt();
-            scanner.nextLine(); // Consumir el salto de línea
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
-                    // Inicio de sesión como administrador
+                    // Login de administrador
                     System.out.print("Ingrese su contraseña de administrador: ");
                     String adminPassword = scanner.nextLine();
                     if (adminPassword.equals(admin.getContraseña())) {
@@ -39,12 +41,13 @@ public class Main {
                     break;
 
                 case 2:
-                    // Inicio de sesión como empleado
+                    // Login de empleado
                     System.out.print("Ingrese su correo: ");
                     String correoEmpleado = scanner.nextLine();
                     System.out.print("Ingrese su contraseña: ");
                     String contraseñaEmpleado = scanner.nextLine();
-                    Empleados empleado = buscarEmpleadoPorCredenciales(listaEmpleados, correoEmpleado, contraseñaEmpleado);
+                    Empleados empleado = buscarEmpleadoPorCredenciales(listaEmpleados, correoEmpleado,
+                            contraseñaEmpleado);
                     if (empleado != null) {
                         menuEmpleado(scanner, listaVuelos, listaPasajeros, listaAsientos, empleado);
                     } else {
@@ -63,20 +66,22 @@ public class Main {
                     String contraseñaPasajeroRegistro = scanner.nextLine();
 
                     // Crear un nuevo pasajero y agregarlo a la lista
-                    Pasajeros nuevoPasajero = new Pasajeros(listaPasajeros.size() + 1, nombrePasajero, contraseñaPasajeroRegistro, correoPasajeroRegistro, false);
+                    Pasajeros nuevoPasajero = new Pasajeros(listaPasajeros.size() + 1, nombrePasajero,
+                            contraseñaPasajeroRegistro, correoPasajeroRegistro, false);
                     listaPasajeros.add(nuevoPasajero);
-                    System.out.println("Pasajero registrado exitosamente. Ahora puede iniciar sesión.");
+                    System.out.println("Pasajero registrado exitosamente con ID: " + nuevoPasajero.getID_pasajero());
                     break;
 
                 case 4:
-                    // Inicio de sesión como pasajero
+                    // Login de pasajero
                     System.out.print("Ingrese su correo: ");
                     String correoPasajero = scanner.nextLine();
                     System.out.print("Ingrese su contraseña: ");
                     String contraseñaPasajero = scanner.nextLine();
-                    Pasajeros pasajero = buscarPasajeroPorCredenciales(listaPasajeros, correoPasajero, contraseñaPasajero);
+                    Pasajeros pasajero = buscarPasajeroPorCredenciales(listaPasajeros, correoPasajero,
+                            contraseñaPasajero);
                     if (pasajero != null) {
-                        menuPasajero(scanner, listaVuelos, pasajero);
+                        menuPasajero(scanner, listaVuelos, listaAsientos, pasajero);
                     } else {
                         System.out.println("Credenciales incorrectas.");
                     }
@@ -87,7 +92,7 @@ public class Main {
                     break;
 
                 default:
-                    System.out.println("Opción no válida. Intente de nuevo.");
+                    System.out.println("Opción no valida. Intente de nuevo.");
             }
         } while (opcion != 5);
 
@@ -95,7 +100,7 @@ public class Main {
     }
 
     private static void menuAdmin(Scanner scanner, ArrayList<Empleados> listaEmpleados) {
-        System.out.println("\n=== MENÚ ADMINISTRADOR ===");
+        System.out.println("\n=== MENU ADMINISTRADOR ===");
         System.out.print("Ingrese el nombre del nuevo empleado: ");
         String nombre = scanner.nextLine();
         System.out.print("Ingrese el correo del nuevo empleado: ");
@@ -108,35 +113,46 @@ public class Main {
         System.out.println("Empleado agregado exitosamente.");
     }
 
-    private static void menuEmpleado(Scanner scanner, ArrayList<Vuelos> listaVuelos, ArrayList<Pasajeros> listaPasajeros, ArrayList<Asientos> listaAsientos, Empleados empleado) {
+    private static void menuEmpleado(Scanner scanner, ArrayList<Vuelos> listaVuelos,
+            ArrayList<Pasajeros> listaPasajeros, ArrayList<Asientos> listaAsientos, Empleados empleado) {
         int opcion;
         do {
-            System.out.println("\n=== MENÚ EMPLEADO ===");
+            System.out.println("\n=== MENU EMPLEADO ===");
             System.out.println("1. Dar de alta un vuelo");
             System.out.println("2. Dar de baja un vuelo");
-            System.out.println("3. Buscar pasajero");
-            System.out.println("4. Salir");
-            System.out.print("Seleccione una opción: ");
+            System.out.println("3. Listar todos los pasajeros");
+            System.out.println("4. Dar de alta un pasajero a un vuelo");
+            System.out.println("5. Dar de baja un pasajero de un vuelo");
+            System.out.println("6. Ver vuelos disponibles");
+            System.out.println("7. Salir");
+            System.out.print("Seleccione una opcion: ");
             opcion = scanner.nextInt();
-            scanner.nextLine(); // Consumir el salto de línea
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
                     // Dar de alta un vuelo
-                    System.out.print("Origen: ");
-                    String origen = scanner.nextLine();
-                    System.out.print("Destino: ");
-                    String destino = scanner.nextLine();
-                    System.out.print("Asientos disponibles: ");
-                    int asientosDisponibles = scanner.nextInt();
-                    scanner.nextLine();
-                    Date horaDespegue = new Date(); // Cambiar por un formato adecuado
-                    Date horaArrivo = new Date(); // Cambiar por un formato adecuado
-                    Date fechaVuelo = new Date(); // Cambiar por un formato adecuado
+                    try {
+                        System.out.print("Origen: ");
+                        String origen = scanner.nextLine();
+                        System.out.print("Destino: ");
+                        String destino = scanner.nextLine();
+                        System.out.print("Asientos disponibles: ");
+                        int asientosDisponibles = scanner.nextInt();
+                        scanner.nextLine();
+                        System.out.print("Fecha del vuelo (dd/MM/yyyy): ");
+                        String fechaVueloStr = scanner.nextLine();
 
-                    Vuelos nuevoVuelo = empleado.darDeAltaVuelo(asientosDisponibles, empleado.getID_Empleado(), origen, destino, horaDespegue, horaArrivo, fechaVuelo);
-                    listaVuelos.add(nuevoVuelo);
-                    System.out.println("Vuelo registrado exitosamente.");
+                        Date fechaVuelo = new SimpleDateFormat("dd/MM/yyyy").parse(fechaVueloStr);
+
+                        // Usar null para los campos de hora
+                        Vuelos nuevoVuelo = empleado.darDeAltaVuelo(asientosDisponibles, empleado.getID_Empleado(),
+                                origen, destino, null, null, fechaVuelo, listaAsientos);
+                        listaVuelos.add(nuevoVuelo);
+                        System.out.println("Vuelo registrado exitosamente.");
+                    } catch (ParseException e) {
+                        System.out.println("Error al ingresar las fechas. Intente de nuevo.");
+                    }
                     break;
 
                 case 2:
@@ -153,35 +169,91 @@ public class Main {
                     break;
 
                 case 3:
-                    // Buscar pasajero
-                    System.out.print("Ingrese el criterio de búsqueda (id, nombre, correo): ");
-                    String criterio = scanner.nextLine();
-                    System.out.print("Ingrese el valor de búsqueda: ");
-                    String valor = scanner.nextLine();
-                    empleado.buscarPasajero(listaPasajeros, criterio, valor);
+                    // Listar todos los pasajeros
+                    listarTodosPasajeros(listaPasajeros);
                     break;
 
                 case 4:
-                    System.out.println("Saliendo del menú empleado...");
+                    // Dar de alta un pasajero a un vuelo
+                    System.out.print("Ingrese el ID del pasajero: ");
+                    int idPasajeroAlta = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.print("Ingrese el ID del vuelo: ");
+                    int idVueloAlta = scanner.nextInt();
+                    scanner.nextLine();
+
+                    Pasajeros pasajeroAlta = buscarPasajeroPorID(listaPasajeros, idPasajeroAlta);
+                    Vuelos vueloAlta = buscarVueloPorID(listaVuelos, idVueloAlta);
+
+                    if (empleado.darDeAltaUsuarioAVuelo(pasajeroAlta, vueloAlta, listaAsientos)) {
+                        System.out.println("Pasajero agregado al vuelo exitosamente.");
+                    }
+                    break;
+
+                case 5:
+                    // Dar de baja un pasajero de un vuelo
+                    System.out.print("Ingrese el ID del pasajero: ");
+                    int idPasajeroBaja = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.print("Ingrese el ID del vuelo: ");
+                    int idVueloBaja = scanner.nextInt();
+                    scanner.nextLine();
+                    System.out.print("Ingrese el numero de asiento: ");
+                    String numAsiento = scanner.nextLine();
+
+                    Pasajeros pasajeroBaja = buscarPasajeroPorID(listaPasajeros, idPasajeroBaja);
+                    Vuelos vueloBaja = buscarVueloPorID(listaVuelos, idVueloBaja);
+
+                    if (empleado.darDeBajaUsuarioDeVuelo(pasajeroBaja, vueloBaja, listaAsientos, numAsiento)) {
+                        System.out.println("Pasajero dado de baja del vuelo exitosamente.");
+                    }
+                    break;
+
+                case 6:
+                    // Ver vuelos disponibles
+                    empleado.buscarVuelosActivos(listaVuelos);
+                    break;
+
+                case 7:
+                    System.out.println("Saliendo del menu empleado...");
                     break;
 
                 default:
-                    System.out.println("Opción no válida. Intente de nuevo.");
+                    System.out.println("Opcion no valida. Intente de nuevo.");
             }
-        } while (opcion != 4);
+        } while (opcion != 7);
     }
 
-    private static void menuPasajero(Scanner scanner, ArrayList<Vuelos> listaVuelos, Pasajeros pasajero) {
+    // Método para listar todos los pasajeros
+    private static void listarTodosPasajeros(ArrayList<Pasajeros> listaPasajeros) {
+        if (listaPasajeros.isEmpty()) {
+            System.out.println("No hay pasajeros registrados en el sistema.");
+            return;
+        }
+
+        System.out.println("\n=== LISTA DE PASAJEROS ===");
+        System.out.println("ID\tNombre\t\tCorreo");
+        System.out.println("--------------------------------------------");
+
+        for (Pasajeros pasajero : listaPasajeros) {
+            System.out.println(pasajero.getID_pasajero() + "\t" +
+                    pasajero.getNombre() + "\t\t" +
+                    pasajero.getCorreo());
+        }
+    }
+
+    private static void menuPasajero(Scanner scanner, ArrayList<Vuelos> listaVuelos, ArrayList<Asientos> listaAsientos,
+            Pasajeros pasajero) {
         int opcion;
         do {
-            System.out.println("\n=== MENÚ PASAJERO ===");
+            System.out.println("\n=== MENU PASAJERO ===");
             System.out.println("1. Buscar vuelos");
             System.out.println("2. Reservar vuelo");
             System.out.println("3. Ver ticket reservado");
             System.out.println("4. Salir");
-            System.out.print("Seleccione una opción: ");
+            System.out.print("Seleccione una opcion: ");
             opcion = scanner.nextInt();
-            scanner.nextLine(); // Consumir el salto de línea
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
@@ -189,7 +261,7 @@ public class Main {
                     break;
 
                 case 2:
-                    pasajero.reservarVuelo(listaVuelos);
+                    pasajero.reservarVuelo(listaVuelos, listaAsientos);
                     break;
 
                 case 3:
@@ -197,16 +269,17 @@ public class Main {
                     break;
 
                 case 4:
-                    System.out.println("Saliendo del menú pasajero...");
+                    System.out.println("Saliendo del menu pasajero...");
                     break;
 
                 default:
-                    System.out.println("Opción no válida. Intente de nuevo.");
+                    System.out.println("Opcion no valida. Intente de nuevo.");
             }
         } while (opcion != 4);
     }
 
-    private static Empleados buscarEmpleadoPorCredenciales(ArrayList<Empleados> listaEmpleados, String correo, String contraseña) {
+    private static Empleados buscarEmpleadoPorCredenciales(ArrayList<Empleados> listaEmpleados, String correo,
+            String contraseña) {
         for (Empleados empleado : listaEmpleados) {
             if (empleado.getCorreo().equalsIgnoreCase(correo) && empleado.getContraseña().equals(contraseña)) {
                 return empleado;
@@ -215,9 +288,19 @@ public class Main {
         return null;
     }
 
-    private static Pasajeros buscarPasajeroPorCredenciales(ArrayList<Pasajeros> listaPasajeros, String correo, String contraseña) {
+    private static Pasajeros buscarPasajeroPorCredenciales(ArrayList<Pasajeros> listaPasajeros, String correo,
+            String contraseña) {
         for (Pasajeros pasajero : listaPasajeros) {
             if (pasajero.getCorreo().equalsIgnoreCase(correo) && pasajero.getContraseña().equals(contraseña)) {
+                return pasajero;
+            }
+        }
+        return null;
+    }
+
+    private static Pasajeros buscarPasajeroPorID(ArrayList<Pasajeros> listaPasajeros, int id) {
+        for (Pasajeros pasajero : listaPasajeros) {
+            if (pasajero.getID_pasajero() == id) {
                 return pasajero;
             }
         }
